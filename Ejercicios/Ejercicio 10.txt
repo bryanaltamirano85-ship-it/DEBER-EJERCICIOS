@@ -1,0 +1,192 @@
+// Importa Scanner para leer datos del teclado
+import java.util.Scanner;
+// Importa ArrayList, la lista dinámica donde se guardan los pedidos
+import java.util.ArrayList;
+
+// Clase que representa un pedido del restaurante
+class Pedido {
+    // Nombre del cliente que hizo el pedido
+    String cliente;
+    // Plato solicitado
+    String plato;
+    // Cantidad de platos pedidos
+    int cantidad;
+    // Precio de cada plato
+    double precioUnitario;
+
+    // Constructor: se ejecuta al crear un pedido y asigna sus datos
+    Pedido(String cliente, String plato, int cantidad, double precioUnitario) {
+        // "this.cliente" es el atributo; "cliente" es el valor recibido
+        this.cliente = cliente;
+        // Guarda el plato
+        this.plato = plato;
+        // Guarda la cantidad
+        this.cantidad = cantidad;
+        // Guarda el precio unitario
+        this.precioUnitario = precioUnitario;
+    }
+
+    // Calcula el valor del pedido antes de aplicar descuento
+    double calcularSubtotal() {
+        // Cantidad multiplicada por el precio de cada plato
+        return cantidad * precioUnitario;
+    }
+
+    // Calcula el descuento que corresponde al pedido
+    double calcularDescuento() {
+        // Si el subtotal supera los 50 USD...
+        if (calcularSubtotal() > 50) {
+            // ...el descuento es el 10% del subtotal
+            return calcularSubtotal() * 0.10;
+        }
+        // Si no supera los 50 USD, no hay descuento
+        return 0;
+    }
+
+    // Calcula el total que debe pagar el cliente
+    double calcularTotal() {
+        // Subtotal menos el descuento (que puede ser 0)
+        return calcularSubtotal() - calcularDescuento();
+    }
+}
+
+// Clase principal; el nombre coincide con el archivo Main.java
+public class Main {
+    // Método main: aquí empieza la ejecución del programa
+    public static void main(String[] args) {
+        // Objeto que lee lo que el usuario escribe
+        Scanner sc = new Scanner(System.in);
+        // Lista que guarda todos los pedidos registrados
+        ArrayList<Pedido> pedidos = new ArrayList<>();
+        // Variable que guarda la opción elegida en el menú
+        int opcion;
+
+        // Ciclo que muestra el menú hasta que el usuario elija 0 (salir)
+        do {
+            // Imprime el menú de opciones
+            System.out.println("\n===== PEDIDOS DEL RESTAURANTE =====");
+            System.out.println("1. Registrar pedidos");
+            System.out.println("2. Mostrar total a pagar de cada pedido");
+            System.out.println("3. Calcular ingreso total del restaurante");
+            System.out.println("4. Mostrar el pedido de mayor valor");
+            System.out.println("0. Salir");
+            System.out.print("Elija una opción: ");
+            // Lee la línea como texto y la convierte a entero
+            opcion = Integer.parseInt(sc.nextLine());
+
+            // Según la opción elegida, ejecuta un bloque distinto
+            switch (opcion) {
+
+                // a. REGISTRAR PEDIDOS
+                case 1:
+                    // Pregunta cuántos pedidos se van a registrar
+                    System.out.print("¿Cuántos pedidos desea registrar? ");
+                    // Guarda esa cantidad
+                    int cantidadPedidos = Integer.parseInt(sc.nextLine());
+                    // Repite el registro tantas veces como pedidos haya
+                    for (int i = 1; i <= cantidadPedidos; i++) {
+                        // Indica qué pedido se está registrando
+                        System.out.println("\nPedido " + i);
+                        // Pide el nombre del cliente
+                        System.out.print("Nombre del cliente: ");
+                        // Lee el nombre completo (puede tener espacios)
+                        String cliente = sc.nextLine();
+                        // Pide el plato solicitado
+                        System.out.print("Plato solicitado: ");
+                        // Lee el nombre del plato
+                        String plato = sc.nextLine();
+                        // Pide la cantidad de platos
+                        System.out.print("Cantidad: ");
+                        // Lee y convierte a entero
+                        int cantidad = Integer.parseInt(sc.nextLine());
+                        // Pide el precio unitario
+                        System.out.print("Precio unitario (USD): ");
+                        // Lee y convierte a decimal
+                        double precio = Double.parseDouble(sc.nextLine());
+                        // Crea el objeto con los datos y lo agrega a la lista
+                        pedidos.add(new Pedido(cliente, plato, cantidad, precio));
+                    }
+                    // Sale del switch para volver al menú
+                    break;
+
+                // b y c. TOTAL A PAGAR POR CADA PEDIDO (CON DESCUENTO)
+                case 2:
+                    // Si la lista está vacía, avisa y no sigue
+                    if (pedidos.isEmpty()) {
+                        System.out.println("No hay pedidos registrados.");
+                        break;
+                    }
+                    // Título de la sección
+                    System.out.println("\n--- TOTAL A PAGAR POR PEDIDO ---");
+                    // Encabezado de la tabla con anchos fijos para alinear columnas
+                    System.out.printf("%-15s %-15s %5s %10s %10s %10s%n",
+                            "Cliente", "Plato", "Cant.", "Subtotal", "Descuento", "Total");
+                    // Recorre cada pedido de la lista
+                    for (Pedido p : pedidos) {
+                        // Imprime una fila con los datos y los valores calculados
+                        System.out.printf("%-15s %-15s %5d %10.2f %10.2f %10.2f%n",
+                                p.cliente, p.plato, p.cantidad,
+                                p.calcularSubtotal(), p.calcularDescuento(), p.calcularTotal());
+                    }
+                    break;
+
+                // d. INGRESO TOTAL DEL RESTAURANTE
+                case 3:
+                    // Acumulador del ingreso total; empieza en 0
+                    double ingresoTotal = 0;
+                    // Recorre cada pedido
+                    for (Pedido p : pedidos) {
+                        // Suma el total pagado (ya con descuento) de cada pedido
+                        ingresoTotal += p.calcularTotal();
+                    }
+                    // Muestra el ingreso total con 2 decimales
+                    System.out.printf("%nIngreso total del restaurante: $%.2f%n", ingresoTotal);
+                    break;
+
+                // e. PEDIDO DE MAYOR VALOR
+                case 4:
+                    // Si la lista está vacía, avisa y no sigue
+                    if (pedidos.isEmpty()) {
+                        System.out.println("No hay pedidos registrados.");
+                        break;
+                    }
+                    // Supone que el primer pedido es el de mayor valor
+                    Pedido mayor = pedidos.get(0);
+                    // Recorre todos los pedidos de la lista
+                    for (Pedido p : pedidos) {
+                        // Si este pedido paga más que el mayor guardado...
+                        if (p.calcularTotal() > mayor.calcularTotal()) {
+                            // ...lo guarda como el nuevo mayor
+                            mayor = p;
+                        }
+                    }
+                    // Título de la sección
+                    System.out.println("\n--- PEDIDO DE MAYOR VALOR ---");
+                    // Muestra el cliente
+                    System.out.println("Cliente: " + mayor.cliente);
+                    // Muestra el plato
+                    System.out.println("Plato: " + mayor.plato);
+                    // Muestra la cantidad
+                    System.out.println("Cantidad: " + mayor.cantidad);
+                    // Muestra el total pagado con 2 decimales
+                    System.out.printf("Total pagado: $%.2f%n", mayor.calcularTotal());
+                    break;
+
+                // SALIR
+                case 0:
+                    // Mensaje de despedida
+                    System.out.println("Programa finalizado.");
+                    break;
+
+                // Cualquier otro número
+                default:
+                    // Avisa que la opción no existe
+                    System.out.println("Opción inválida.");
+            }
+        // El menú se repite mientras la opción no sea 0
+        } while (opcion != 0);
+
+        // Cierra el Scanner
+        sc.close();
+    } // Cierra main
+} // Cierra la clase Main

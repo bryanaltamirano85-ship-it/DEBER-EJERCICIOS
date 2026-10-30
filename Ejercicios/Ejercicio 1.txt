@@ -1,0 +1,89 @@
+// Importa Scanner para leer datos del teclado
+import java.util.Scanner;
+
+// Clase principal
+public class Main {
+    // Método main: aquí empieza la ejecución del programa
+    public static void main(String[] args) {
+        // Objeto que lee lo que el usuario escribe
+        Scanner sc = new Scanner(System.in);
+
+        // Pide la dimensión N de los vectores
+        System.out.print("Ingrese N (cantidad de estudiantes por vector): ");
+        // Lee la línea como texto y la convierte a entero
+        int n = Integer.parseInt(sc.nextLine());
+
+        // Vector con las cédulas de los reprobados en MATEMATICA
+        String[] matematica = new String[n];
+        // Vector con las cédulas de los reprobados en INGLES
+        String[] ingles = new String[n];
+        // Vector con las cédulas de quienes reprobaron ambas materias (máximo n)
+        String[] ambas = new String[n];
+        // Contador de cuántas cédulas se han guardado en el vector "ambas"
+        int cantidadAmbas = 0;
+
+        // Ciclo para llenar el vector de MATEMATICA
+        System.out.println("\nCédulas de estudiantes que reprobaron MATEMATICA:");
+        for (int i = 0; i < n; i++) {
+            // Pide la cédula de la posición i (se muestra i+1 para contar desde 1)
+            System.out.print("Cédula " + (i + 1) + ": ");
+            // Guarda la cédula leída en la posición i
+            matematica[i] = sc.nextLine();
+        }
+
+        // Ciclo para llenar el vector de INGLES
+        System.out.println("\nCédulas de estudiantes que reprobaron INGLES:");
+        for (int i = 0; i < n; i++) {
+            // Pide la cédula de la posición i
+            System.out.print("Cédula " + (i + 1) + ": ");
+            // Guarda la cédula leída en la posición i
+            ingles[i] = sc.nextLine();
+        }
+
+        // Ciclo externo: toma cada cédula del vector de MATEMATICA
+        for (int i = 0; i < n; i++) {
+            // Ciclo interno: la busca en todo el vector de INGLES
+            for (int j = 0; j < n; j++) {
+                // equals compara el contenido de dos textos (no se usa == con String)
+                if (matematica[i].equals(ingles[j])) {
+                    // Si coincide, la cédula reprobó ambas: se guarda en el tercer vector
+                    ambas[cantidadAmbas] = matematica[i];
+                    // Avanza a la siguiente posición libre del tercer vector
+                    cantidadAmbas++;
+                    // Sale del ciclo interno: ya se encontró, no hace falta seguir
+                    break;
+                }
+            }
+        }
+
+        // Imprime el primer vector
+        System.out.println("\n--- Reprobados en MATEMATICA ---");
+        for (int i = 0; i < n; i++) {
+            // Muestra la posición y la cédula
+            System.out.println("Posición " + i + ": " + matematica[i]);
+        }
+
+        // Imprime el segundo vector
+        System.out.println("\n--- Reprobados en INGLES ---");
+        for (int i = 0; i < n; i++) {
+            // Muestra la posición y la cédula
+            System.out.println("Posición " + i + ": " + ingles[i]);
+        }
+
+        // Imprime el tercer vector (solo las posiciones ocupadas)
+        System.out.println("\n--- Reprobados en AMBAS materias ---");
+        // Si el contador quedó en 0, ninguna cédula coincidió
+        if (cantidadAmbas == 0) {
+            System.out.println("Ningún estudiante reprobó las dos materias.");
+        } else {
+            // Recorre solo hasta cantidadAmbas, no hasta n
+            for (int i = 0; i < cantidadAmbas; i++) {
+                // Muestra la posición y la cédula
+                System.out.println("Posición " + i + ": " + ambas[i]);
+            }
+        }
+
+        // Cierra el Scanner
+        sc.close();
+    } // Cierra main
+} // Cierra la clase Main

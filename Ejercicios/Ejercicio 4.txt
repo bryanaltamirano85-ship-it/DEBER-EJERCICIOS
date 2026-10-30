@@ -1,0 +1,126 @@
+import java.util.Scanner;
+import java.util.Random;
+ 
+public class Main {
+    public static void main(String[] args) {
+ 
+        Scanner teclado = new Scanner(System.in);
+        Random aleatorio = new Random();
+ 
+        int M, N, opcion;
+ 
+        System.out.print("Ingrese el numero de filas M: ");
+        M = teclado.nextInt();
+ 
+        System.out.print("Ingrese el numero de columnas N: ");
+        N = teclado.nextInt();
+ 
+        int[][] A = new int[M][N];
+        int[][] B = new int[M][N];
+ 
+        // Llenar las matrices con numeros aleatorios
+        for (int i = 0; i < M; i++) {
+            for (int j = 0; j < N; j++) {
+                A[i][j] = aleatorio.nextInt(10);
+                B[i][j] = aleatorio.nextInt(10);
+            }
+        }
+ 
+        // Mostrar las matrices
+        System.out.println("\nMatriz A:");
+        for (int i = 0; i < M; i++) {
+            for (int j = 0; j < N; j++) {
+                System.out.print(A[i][j] + "\t");
+            }
+            System.out.println();
+        }
+ 
+        System.out.println("\nMatriz B:");
+        for (int i = 0; i < M; i++) {
+            for (int j = 0; j < N; j++) {
+                System.out.print(B[i][j] + "\t");
+            }
+            System.out.println();
+        }
+ 
+        do {
+            System.out.println("\n===== MENU DE OPERACIONES =====");
+            System.out.println("1. Sumar matrices");
+            System.out.println("2. Restar matrices");
+            System.out.println("3. Multiplicar matrices");
+            System.out.println("4. Trasponer matriz A");
+            System.out.println("5. Salir");
+            System.out.print("Seleccione una opcion: ");
+            opcion = teclado.nextInt();
+ 
+            switch (opcion) {
+ 
+                case 1:
+                    System.out.println("\nSuma de matrices:");
+                    for (int i = 0; i < M; i++) {
+                        for (int j = 0; j < N; j++) {
+                            System.out.print((A[i][j] + B[i][j]) + "\t");
+                        }
+                        System.out.println();
+                    }
+                    break;
+ 
+                case 2:
+                    System.out.println("\nResta de matrices:");
+                    for (int i = 0; i < M; i++) {
+                        for (int j = 0; j < N; j++) {
+                            System.out.print((A[i][j] - B[i][j]) + "\t");
+                        }
+                        System.out.println();
+                    }
+                    break;
+ 
+                case 3:
+                    if (M != N) {
+                        System.out.println(
+                            "No se pueden multiplicar estas matrices: deben ser cuadradas."
+                        );
+                    } else {
+                        int[][] C = new int[M][N];
+ 
+                        for (int i = 0; i < M; i++) {
+                            for (int j = 0; j < N; j++) {
+                                for (int k = 0; k < N; k++) {
+                                    C[i][j] += A[i][k] * B[k][j];
+                                }
+                            }
+                        }
+ 
+                        System.out.println("\nMultiplicacion de matrices:");
+                        for (int i = 0; i < M; i++) {
+                            for (int j = 0; j < N; j++) {
+                                System.out.print(C[i][j] + "\t");
+                            }
+                            System.out.println();
+                        }
+                    }
+                    break;
+ 
+                case 4:
+                    System.out.println("\nMatriz A traspuesta:");
+                    for (int j = 0; j < N; j++) {
+                        for (int i = 0; i < M; i++) {
+                            System.out.print(A[i][j] + "\t");
+                        }
+                        System.out.println();
+                    }
+                    break;
+ 
+                case 5:
+                    System.out.println("Programa finalizado.");
+                    break;
+ 
+                default:
+                    System.out.println("Opcion no valida.");
+            }
+ 
+        } while (opcion != 5);
+ 
+        teclado.close();
+    }
+}

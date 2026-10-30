@@ -1,0 +1,93 @@
+// Importa Scanner para leer datos del teclado
+import java.util.Scanner;
+// Importa Random para generar números aleatorios
+import java.util.Random;
+
+// Clase principal
+public class Main {
+    // Método main: aquí empieza la ejecución del programa
+    public static void main(String[] args) {
+        // Objeto que lee lo que el usuario escribe
+        Scanner sc = new Scanner(System.in);
+        // Objeto que genera números aleatorios
+        Random aleatorio = new Random();
+
+        // Vector original de 20 elementos enteros
+        int[] vector = new int[20];
+
+        // Llena el vector recorriendo cada posición (de 0 a 19)
+        for (int i = 0; i < vector.length; i++) {
+            // nextInt(51) genera un número entre 0 y 50
+            vector[i] = aleatorio.nextInt(51);
+        }
+
+        // Título para mostrar el vector original
+        System.out.println("Vector original:");
+        // Recorre el vector para mostrar cada elemento
+        for (int i = 0; i < vector.length; i++) {
+            // Imprime el índice y el valor guardado en esa posición
+            System.out.println("Posición " + i + ": " + vector[i]);
+        }
+
+        // a. BÚSQUEDA DE UN NÚMERO
+        // Pide el número que se quiere buscar
+        System.out.print("\nIngrese el número a buscar: ");
+        // Guarda el número ingresado
+        int buscado = sc.nextInt();
+        // Bandera que indica si se encontró al menos una vez; empieza en false
+        boolean encontrado = false;
+        // Recorre todas las posiciones del vector
+        for (int i = 0; i < vector.length; i++) {
+            // Si el elemento de esta posición es igual al número buscado...
+            if (vector[i] == buscado) {
+                // ...muestra la posición en la que está
+                System.out.println("El número " + buscado + " se encuentra en la posición " + i);
+                // Cambia la bandera porque ya se encontró
+                encontrado = true;
+            }
+        }
+        // Si al terminar la bandera sigue en false, el número no está en el vector
+        if (!encontrado) {
+            // Avisa que no se encontró
+            System.out.println("El número " + buscado + " no se encuentra en el vector.");
+        }
+
+        // b. SEGUNDO VECTOR CON LOS ÍNDICES IMPARES
+        // Los índices impares de 0 a 19 son 1, 3, 5, ..., 19: en total 10 posiciones
+        int[] segundo = new int[vector.length / 2];
+        // Contador que indica en qué posición del segundo vector se guarda
+        int k = 0;
+        // Recorre el vector original saltando de 2 en 2, empezando en el índice 1
+        for (int i = 1; i < vector.length; i += 2) {
+            // Copia el elemento del índice impar al segundo vector
+            segundo[k] = vector[i];
+            // Avanza a la siguiente posición del segundo vector
+            k++;
+        }
+
+        // Título para mostrar el segundo vector
+        System.out.println("\nSegundo vector (índices impares del original):");
+        // Recorre el segundo vector
+        for (int i = 0; i < segundo.length; i++) {
+            // Imprime la posición y el valor en el segundo vector
+            System.out.println("Posición " + i + ": " + segundo[i]);
+        }
+
+        // c. ELEMENTOS MAYORES A 20 EN EL SEGUNDO VECTOR
+        // Contador de elementos mayores a 20; empieza en 0
+        int mayores = 0;
+        // Recorre el segundo vector
+        for (int i = 0; i < segundo.length; i++) {
+            // Si el elemento es mayor a 20...
+            if (segundo[i] > 20) {
+                // ...suma 1 al contador
+                mayores++;
+            }
+        }
+        // Muestra el resultado
+        System.out.println("\nElementos mayores a 20 en el segundo vector: " + mayores);
+
+        // Cierra el Scanner
+        sc.close();
+    } // Cierra main
+} // Cierra la clase Main

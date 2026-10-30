@@ -1,0 +1,208 @@
+// Importa Scanner para leer datos del teclado
+import java.util.Scanner;
+// Importa ArrayList, la lista dinámica donde se guardan los medicamentos
+import java.util.ArrayList;
+
+// Clase que representa un medicamento (agrupa sus 4 datos)
+class Medicamento {
+    // Nombre del medicamento
+    String nombre;
+    // Cantidad de unidades disponibles
+    int stockActual;
+    // Cantidad mínima que se debe mantener en inventario
+    int stockMinimo;
+    // Precio de cada unidad
+    double precio;
+
+    // Constructor: se ejecuta al crear un medicamento y asigna sus datos
+    Medicamento(String nombre, int stockActual, int stockMinimo, double precio) {
+        // "this.nombre" es el atributo; "nombre" es el valor recibido
+        this.nombre = nombre;
+        // Guarda el stock actual
+        this.stockActual = stockActual;
+        // Guarda el stock mínimo
+        this.stockMinimo = stockMinimo;
+        // Guarda el precio unitario
+        this.precio = precio;
+    }
+}
+
+// Clase principal; el nombre coincide con el archivo Main.java
+public class Main {
+    // Método main: aquí empieza la ejecución del programa
+    public static void main(String[] args) {
+        // Objeto que lee lo que el usuario escribe
+        Scanner sc = new Scanner(System.in);
+        // Lista que guarda todos los medicamentos del inventario
+        ArrayList<Medicamento> inventario = new ArrayList<>();
+        // Variable que guarda la opción elegida en el menú
+        int opcion;
+
+        // Ciclo que muestra el menú hasta que el usuario elija 0 (salir)
+        do {
+            // Imprime el menú de opciones
+            System.out.println("\n===== INVENTARIO DE FARMACIA =====");
+            System.out.println("1. Registrar medicamentos");
+            System.out.println("2. Mostrar medicamentos bajo el stock mínimo");
+            System.out.println("3. Calcular valor total del inventario");
+            System.out.println("4. Registrar una venta (actualizar stock)");
+            System.out.println("5. Reporte general del inventario");
+            System.out.println("0. Salir");
+            System.out.print("Elija una opción: ");
+            // Lee la línea como texto y la convierte a entero
+            opcion = Integer.parseInt(sc.nextLine());
+
+            // Según la opción elegida, ejecuta un bloque distinto
+            switch (opcion) {
+
+                // a. REGISTRAR MEDICAMENTOS
+                case 1:
+                    // Pregunta cuántos medicamentos se van a registrar
+                    System.out.print("¿Cuántos medicamentos desea registrar? ");
+                    // Guarda esa cantidad
+                    int cantidad = Integer.parseInt(sc.nextLine());
+                    // Repite el registro tantas veces como medicamentos haya
+                    for (int i = 1; i <= cantidad; i++) {
+                        // Indica qué medicamento se está registrando
+                        System.out.println("\nMedicamento " + i);
+                        // Pide el nombre
+                        System.out.print("Nombre: ");
+                        // Lee el nombre completo (puede tener espacios)
+                        String nombre = sc.nextLine();
+                        // Pide el stock actual
+                        System.out.print("Stock actual: ");
+                        // Lee y convierte a entero
+                        int stock = Integer.parseInt(sc.nextLine());
+                        // Pide el stock mínimo
+                        System.out.print("Stock mínimo: ");
+                        // Lee y convierte a entero
+                        int minimo = Integer.parseInt(sc.nextLine());
+                        // Pide el precio unitario
+                        System.out.print("Precio unitario: ");
+                        // Lee y convierte a decimal
+                        double precio = Double.parseDouble(sc.nextLine());
+                        // Crea el objeto con los datos y lo agrega a la lista
+                        inventario.add(new Medicamento(nombre, stock, minimo, precio));
+                    }
+                    // Sale del switch para volver al menú
+                    break;
+
+                // b. MEDICAMENTOS BAJO EL STOCK MÍNIMO
+                case 2:
+                    // Título de la sección
+                    System.out.println("\n--- Medicamentos bajo el stock mínimo ---");
+                    // Bandera para saber si se encontró al menos uno
+                    boolean hayBajos = false;
+                    // Recorre cada medicamento de la lista
+                    for (Medicamento m : inventario) {
+                        // Si el stock actual es menor que el mínimo...
+                        if (m.stockActual < m.stockMinimo) {
+                            // ...lo muestra con su stock actual y su mínimo
+                            System.out.println(m.nombre + " | Stock: " + m.stockActual
+                                    + " | Mínimo: " + m.stockMinimo);
+                            // Marca que sí se encontró uno
+                            hayBajos = true;
+                        }
+                    }
+                    // Si ninguno estaba bajo el mínimo, avisa
+                    if (!hayBajos) {
+                        System.out.println("Ningún medicamento está bajo el mínimo.");
+                    }
+                    break;
+
+                // c. VALOR ECONÓMICO TOTAL DEL INVENTARIO
+                case 3:
+                    // Acumulador del valor total; empieza en 0
+                    double total = 0;
+                    // Recorre cada medicamento
+                    for (Medicamento m : inventario) {
+                        // Suma (unidades x precio) de cada medicamento
+                        total += m.stockActual * m.precio;
+                    }
+                    // Muestra el total con 2 decimales
+                    System.out.printf("%nValor total del inventario: $%.2f%n", total);
+                    break;
+
+                // d. ACTUALIZAR STOCK DESPUÉS DE UNA VENTA
+                case 4:
+                    // Pide el nombre del medicamento vendido
+                    System.out.print("Nombre del medicamento vendido: ");
+                    // Lee el nombre a buscar
+                    String buscado = sc.nextLine();
+                    // Variable para guardar el medicamento encontrado (null = no hay)
+                    Medicamento encontrado = null;
+                    // Recorre la lista buscando coincidencia de nombre
+                    for (Medicamento m : inventario) {
+                        // Compara sin importar mayúsculas o minúsculas
+                        if (m.nombre.equalsIgnoreCase(buscado)) {
+                            // Guarda el medicamento encontrado
+                            encontrado = m;
+                        }
+                    }
+                    // Si no se encontró, avisa
+                    if (encontrado == null) {
+                        System.out.println("Medicamento no encontrado.");
+                    } else {
+                        // Pide las unidades vendidas
+                        System.out.print("Unidades vendidas: ");
+                        // Lee y convierte a entero
+                        int vendidas = Integer.parseInt(sc.nextLine());
+                        // Valida que sean positivas y que alcance el stock
+                        if (vendidas <= 0 || vendidas > encontrado.stockActual) {
+                            System.out.println("Cantidad inválida. Stock disponible: "
+                                    + encontrado.stockActual);
+                        } else {
+                            // Resta las unidades vendidas del stock
+                            encontrado.stockActual -= vendidas;
+                            // Confirma la venta y muestra el nuevo stock
+                            System.out.println("Venta registrada. Nuevo stock: "
+                                    + encontrado.stockActual);
+                            // Avisa si el stock quedó bajo el mínimo
+                            if (encontrado.stockActual < encontrado.stockMinimo) {
+                                System.out.println("¡Alerta! Quedó bajo el stock mínimo.");
+                            }
+                        }
+                    }
+                    break;
+
+                // e. REPORTE GENERAL
+                case 5:
+                    // Título del reporte
+                    System.out.println("\n--- REPORTE GENERAL DEL INVENTARIO ---");
+                    // Encabezado de la tabla con anchos fijos para alinear columnas
+                    System.out.printf("%-20s %8s %8s %10s %12s%n",
+                            "Nombre", "Stock", "Mínimo", "Precio", "Valor");
+                    // Acumulador del valor total
+                    double totalReporte = 0;
+                    // Recorre cada medicamento
+                    for (Medicamento m : inventario) {
+                        // Calcula el valor de ese medicamento
+                        double valor = m.stockActual * m.precio;
+                        // Imprime una fila de la tabla
+                        System.out.printf("%-20s %8d %8d %10.2f %12.2f%n",
+                                m.nombre, m.stockActual, m.stockMinimo, m.precio, valor);
+                        // Suma al total general
+                        totalReporte += valor;
+                    }
+                    // Imprime el total al final del reporte
+                    System.out.printf("%nValor total del inventario: $%.2f%n", totalReporte);
+                    break;
+
+                // SALIR
+                case 0:
+                    // Mensaje de despedida
+                    System.out.println("Programa finalizado.");
+                    break;
+
+                // Cualquier otro número
+                default:
+                    // Avisa que la opción no existe
+                    System.out.println("Opción inválida.");
+            }
+        // El menú se repite mientras la opción no sea 0
+        } while (opcion != 0);
+
+        // Cierra el Scanner
+        sc.close();
+    } // Cierra main
+} // Cierra la clase Main

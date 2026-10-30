@@ -1,0 +1,106 @@
+// Importa Scanner para leer datos del teclado
+import java.util.Scanner;
+
+// Clase principal
+public class Main {
+    // Método main: aquí empieza la ejecución del programa
+    public static void main(String[] args) {
+        // Crea el objeto que lee lo que el usuario escribe
+        Scanner sc = new Scanner(System.in);
+
+        // Pide la cantidad de operarios
+        System.out.print("Número de operarios (N): ");
+        // Guarda esa cantidad en n
+        int n = sc.nextInt();
+
+        // Contadores de operarios por grado de eficiencia (inician en 0)
+        int optima = 0, buena = 0, regular = 0, deficiente = 0;
+
+        // Ciclo que repite el proceso para cada operario
+        for (int i = 1; i <= n; i++) {
+            // Muestra el número de operario que se está registrando
+            System.out.println("\n--- Operario " + i + " ---");
+
+            // Pide las horas de ausencia durante el periodo
+            System.out.print("Horas de ausencia: ");
+            // Guarda las horas (double, por si hay decimales como 2.5)
+            double horasAusencia = sc.nextDouble();
+
+            // Pide la cantidad de pupitres defectuosos
+            System.out.print("Pupitres defectuosos: ");
+            // Guarda los defectuosos (entero)
+            int defectuosos = sc.nextInt();
+
+            // Pide la cantidad de pupitres producidos
+            System.out.print("Pupitres producidos: ");
+            // Guarda los producidos (entero)
+            int producidos = sc.nextInt();
+
+            // Contador de condiciones que cumple este operario; empieza en 0
+            int cumple = 0;
+
+            // Condición a: ausencia menor o igual a 3 horas
+            if (horasAusencia <= 3) {
+                // Si se cumple, suma 1 al contador de condiciones
+                cumple++;
+            }
+            // Condición b: defectuosos menores a 300
+            if (defectuosos < 300) {
+                // Si se cumple, suma 1
+                cumple++;
+            }
+            // Condición c: producidos mayores a 10000
+            if (producidos > 10000) {
+                // Si se cumple, suma 1
+                cumple++;
+            }
+
+            // Variable de texto para guardar el grado de este operario
+            String grado;
+            // Si cumple las 3 condiciones
+            if (cumple == 3) {
+                // Asigna grado óptimo
+                grado = "ÓPTIMA";
+                // Suma 1 al contador de óptimos
+                optima++;
+            // Si no, pero cumple 2 condiciones
+            } else if (cumple == 2) {
+                // Asigna grado bueno
+                grado = "BUENA";
+                // Suma 1 al contador de buenos
+                buena++;
+            // Si no, pero cumple 1 condición
+            } else if (cumple == 1) {
+                // Asigna grado regular
+                grado = "REGULAR";
+                // Suma 1 al contador de regulares
+                regular++;
+            // Si no cumple ninguna
+            } else {
+                // Asigna grado deficiente
+                grado = "DEFICIENTE";
+                // Suma 1 al contador de deficientes
+                deficiente++;
+            }
+
+            // Muestra el resultado de este operario
+            System.out.println("Condiciones cumplidas: " + cumple + " de 3");
+            // Muestra el grado de eficiencia obtenido
+            System.out.println("Grado de eficiencia: " + grado);
+        } // Fin del ciclo de operarios
+
+        // Título del resumen final
+        System.out.println("\n--- RESUMEN GENERAL ---");
+        // Muestra cuántos operarios hay en cada grado
+        System.out.println("Óptima: " + optima);
+        // Cantidad con grado bueno
+        System.out.println("Buena: " + buena);
+        // Cantidad con grado regular
+        System.out.println("Regular: " + regular);
+        // Cantidad con grado deficiente
+        System.out.println("Deficiente: " + deficiente);
+
+        // Cierra el Scanner
+        sc.close();
+    } // Cierra main
+} // Cierra la clase Main

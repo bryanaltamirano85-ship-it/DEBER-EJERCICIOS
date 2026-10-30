@@ -1,0 +1,140 @@
+// Importa la clase Scanner, que permite leer datos escritos por teclado
+import java.util.Scanner;
+
+// Declara la clase principal
+public class Main {
+    // Método main: punto de entrada, aquí empieza a ejecutarse el programa
+    public static void main(String[] args) {
+        // Crea el objeto "sc" que lee lo que el usuario escribe en el teclado
+        Scanner sc = new Scanner(System.in);
+        // Constante con el número de materias; "final" indica que su valor no cambia
+        final int MATERIAS = 8;
+
+        // Muestra el mensaje pidiendo la cantidad de estudiantes (sin salto de línea)
+        System.out.print("Número de estudiantes (N): ");
+        // Lee un número entero y lo guarda en la variable n
+        int n = sc.nextInt();
+
+        // Arreglo de n posiciones para guardar el código de cada estudiante
+        int[] codigos = new int[n];
+        // Matriz de n filas (estudiantes) por 8 columnas (materias) para las notas
+        double[][] notas = new double[n][MATERIAS];
+
+        // Ciclo externo: recorre cada estudiante (i = 0 hasta n-1)
+        for (int i = 0; i < n; i++) {
+            // Pide el código del estudiante; (i + 1) muestra el número empezando en 1
+            System.out.print("\nCódigo del estudiante " + (i + 1) + ": ");
+            // Lee el código y lo guarda en la posición i del arreglo codigos
+            codigos[i] = sc.nextInt();
+            // Ciclo interno: recorre las 8 materias del estudiante actual
+            for (int j = 0; j < MATERIAS; j++) {
+                // Variable temporal que guardará la nota ingresada
+                double nota;
+                // Inicia un ciclo que se repite hasta que la nota sea válida
+                do {
+                    // Pide la nota de la materia j+1
+                    System.out.print("  Nota de la materia " + (j + 1) + " (0-10): ");
+                    // Lee la nota (puede tener decimales)
+                    nota = sc.nextDouble();
+                // Repite mientras la nota sea menor que 0 o mayor que 10 (inválida)
+                } while (nota < 0 || nota > 10);
+                // Guarda la nota válida en la fila i (estudiante), columna j (materia)
+                notas[i][j] = nota;
+            } // Fin del ciclo de materias
+        } // Fin del ciclo de estudiantes
+
+        // a. Arreglo para guardar el promedio de cada estudiante
+        double[] promEstudiante = new double[n];
+        // Recorre cada estudiante (cada fila de la matriz)
+        for (int i = 0; i < n; i++) {
+            // Acumulador de la suma de notas; se reinicia en 0 para cada estudiante
+            double suma = 0;
+            // Recorre las 8 materias de ese estudiante
+            for (int j = 0; j < MATERIAS; j++) {
+                // Suma la nota actual al acumulador
+                suma += notas[i][j];
+            }
+            // Calcula el promedio dividiendo la suma para el número de materias
+            promEstudiante[i] = suma / MATERIAS;
+        }
+
+        // b. Arreglo para guardar el promedio de cada materia
+        double[] promMateria = new double[MATERIAS];
+        // Recorre cada materia (cada columna de la matriz)
+        for (int j = 0; j < MATERIAS; j++) {
+            // Acumulador de la suma de notas; se reinicia para cada materia
+            double suma = 0;
+            // Recorre todos los estudiantes de esa materia
+            for (int i = 0; i < n; i++) {
+                // Suma la nota del estudiante i en la materia j
+                suma += notas[i][j];
+            }
+            // Calcula el promedio dividiendo la suma para el número de estudiantes
+            promMateria[j] = suma / n;
+        }
+
+        // c. Supone que el estudiante en la posición 0 tiene el mayor promedio
+        int posMayor = 0;
+        // Compara desde el segundo estudiante (i = 1) en adelante
+        for (int i = 1; i < n; i++) {
+            // Si este promedio supera al mayor guardado hasta ahora...
+            if (promEstudiante[i] > promEstudiante[posMayor]) {
+                // ...actualiza la posición del mayor promedio
+                posMayor = i;
+            }
+        }
+
+        // d. Arreglo contador de estudiantes aprobados por materia (inicia en 0)
+        int[] aprobados = new int[MATERIAS];
+        // e. Arreglo contador de estudiantes reprobados por materia (inicia en 0)
+        int[] reprobados = new int[MATERIAS];
+        // Recorre cada materia (columna)
+        for (int j = 0; j < MATERIAS; j++) {
+            // Recorre todos los estudiantes de esa materia
+            for (int i = 0; i < n; i++) {
+                // Si la nota está entre 7 y 10 (ambos incluidos), el estudiante aprobó
+                if (notas[i][j] >= 7 && notas[i][j] <= 10) {
+                    // Suma 1 al contador de aprobados de la materia j
+                    aprobados[j]++;
+                // Si no aprobó y la nota es menor que 7, reprobó
+                } else if (notas[i][j] < 7) {
+                    // Suma 1 al contador de reprobados de la materia j
+                    reprobados[j]++;
+                }
+            }
+        }
+
+        // Imprime el título de la sección a (\n deja una línea en blanco antes)
+        System.out.println("\n--- PROMEDIO POR ESTUDIANTE ---");
+        // Recorre los estudiantes para mostrar su promedio
+        for (int i = 0; i < n; i++) {
+            // printf da formato: %d entero, %.2f decimal con 2 cifras, %n salto de línea
+            System.out.printf("Estudiante %d: %.2f%n", codigos[i], promEstudiante[i]);
+        }
+
+        // Imprime el título de la sección b
+        System.out.println("\n--- PROMEDIO POR MATERIA ---");
+        // Recorre las materias para mostrar su promedio
+        for (int j = 0; j < MATERIAS; j++) {
+            // Muestra el número de materia (j+1) y su promedio con 2 decimales
+            System.out.printf("Materia %d: %.2f%n", (j + 1), promMateria[j]);
+        }
+
+        // Imprime el título de la sección c
+        System.out.println("\n--- ESTUDIANTE CON MAYOR PROMEDIO ---");
+        // Muestra el código y el promedio del estudiante ubicado en posMayor
+        System.out.printf("Código %d con promedio %.2f%n", codigos[posMayor], promEstudiante[posMayor]);
+
+        // Imprime el título de las secciones d y e
+        System.out.println("\n--- APROBADOS Y REPROBADOS POR MATERIA ---");
+        // Recorre las materias para mostrar sus contadores
+        for (int j = 0; j < MATERIAS; j++) {
+            // Muestra aprobados y reprobados de la materia j+1 (+ une textos y valores)
+            System.out.println("Materia " + (j + 1) + ": Aprobados = " + aprobados[j]
+                    + " | Reprobados = " + reprobados[j]);
+        }
+
+        // Cierra el Scanner para liberar el recurso de lectura del teclado
+        sc.close();
+    } // Cierra el método main
+} // Cierra la clase Main

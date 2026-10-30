@@ -1,0 +1,102 @@
+// Importa Scanner para leer datos del teclado
+import java.util.Scanner;
+
+// Clase principal
+public class Main {
+    // Método main: aquí empieza la ejecución del programa
+    public static void main(String[] args) {
+        // Crea el objeto que lee lo que el usuario escribe
+        Scanner sc = new Scanner(System.in);
+
+        // Pide la cantidad de trabajadores
+        System.out.print("Número de trabajadores (N): ");
+        // Guarda esa cantidad en n
+        int n = sc.nextInt();
+
+        // Ciclo que repite el proceso para cada trabajador
+        for (int i = 1; i <= n; i++) {
+            // Muestra qué trabajador se está registrando
+            System.out.println("\n--- Trabajador " + i + " ---");
+
+            // Pide el código del trabajador
+            System.out.print("Código del trabajador: ");
+            // Guarda el código (entero)
+            int codigo = sc.nextInt();
+
+            // Pide las horas de ausencia del periodo
+            System.out.print("Horas de ausencia: ");
+            // Guarda las horas (double, por si hay decimales como 2.5)
+            double horasAusencia = sc.nextDouble();
+
+            // Pide la cantidad de pupitres defectuosos
+            System.out.print("Pupitres defectuosos: ");
+            // Guarda los defectuosos (entero)
+            int defectuosos = sc.nextInt();
+
+            // Pide la cantidad de pupitres producidos
+            System.out.print("Pupitres producidos: ");
+            // Guarda los producidos (entero)
+            int producidos = sc.nextInt();
+
+            // Condición 1: true si la ausencia es menor o igual a 3 horas
+            boolean cond1 = horasAusencia <= 3;
+            // Condición 2: true si los defectuosos son menores a 300
+            boolean cond2 = defectuosos < 300;
+            // Condición 3: true si los producidos son mayores a 10000
+            boolean cond3 = producidos > 10000;
+
+            // Variable que guardará el grado de eficiencia del trabajador
+            int grado;
+
+            // Si cumple las tres condiciones
+            if (cond1 && cond2 && cond3) {
+                // Grado 20
+                grado = 20;
+            // Si cumple la 1 y la 2 (y la 3 no, porque ya se descartó arriba)
+            } else if (cond1 && cond2) {
+                // Grado 12
+                grado = 12;
+            // Si cumple la 1 y la 3
+            } else if (cond1 && cond3) {
+                // Grado 13
+                grado = 13;
+            // Si cumple la 2 y la 3
+            } else if (cond2 && cond3) {
+                // Grado 15
+                grado = 15;
+            // Si cumple solo la 1
+            } else if (cond1) {
+                // Grado 7
+                grado = 7;
+            // Si cumple solo la 2
+            } else if (cond2) {
+                // Grado 8
+                grado = 8;
+            // Si cumple solo la 3
+            } else if (cond3) {
+                // Grado 9
+                grado = 9;
+            // Si no cumple ninguna
+            } else {
+                // Grado 5
+                grado = 5;
+            }
+
+            // Imprime el título del informe del trabajador
+            System.out.println("\n>>> INFORMACIÓN DEL TRABAJADOR <<<");
+            // Imprime el código
+            System.out.println("Código: " + codigo);
+            // Imprime las horas de ausencia
+            System.out.println("Horas de ausencia: " + horasAusencia);
+            // Imprime los pupitres defectuosos
+            System.out.println("Pupitres defectuosos: " + defectuosos);
+            // Imprime los pupitres producidos
+            System.out.println("Pupitres producidos: " + producidos);
+            // Imprime el grado de eficiencia calculado
+            System.out.println("Grado de eficiencia: " + grado);
+        } // Fin del ciclo de trabajadores
+
+        // Cierra el Scanner
+        sc.close();
+    } // Cierra main
+} // Cierra la clase Main

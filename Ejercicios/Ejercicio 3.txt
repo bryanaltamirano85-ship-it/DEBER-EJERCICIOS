@@ -1,0 +1,47 @@
+import java.util.Scanner;
+ 
+public class Main {
+    public static void main(String[] args) {
+ 
+        Scanner teclado = new Scanner(System.in);
+ 
+        int N;
+ 
+        System.out.print("Ingrese la cantidad de empleados: ");
+        N = teclado.nextInt();
+ 
+        int[] codigos = new int[N];
+        String[] nombres = new String[N];
+ 
+        for (int i = 0; i < N; i++) {
+            System.out.println("\nEmpleado " + (i + 1));
+ 
+            System.out.print("Ingrese el codigo: ");
+            codigos[i] = teclado.nextInt();
+ 
+            teclado.nextLine();
+ 
+            System.out.print("Ingrese el nombre: ");
+            nombres[i] = teclado.nextLine();
+        }
+ 
+        System.out.print("\nIngrese el codigo del empleado que busca: ");
+        int codigoBuscar = teclado.nextInt();
+ 
+        boolean encontrado = false;
+ 
+        for (int i = 0; i < N; i++) {
+            if (codigos[i] == codigoBuscar) {
+                System.out.println("Nombre del empleado: " + nombres[i]);
+                encontrado = true;
+                break;
+            }
+        }
+ 
+        if (!encontrado) {
+            System.out.println("No existe un empleado con ese codigo.");
+        }
+ 
+        teclado.close();
+    }
+}
